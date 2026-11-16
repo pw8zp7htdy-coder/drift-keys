@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#090914">
+<title>DRIFT//KEYS</title>
+<style>
+:root{color-scheme:dark;--bg:#090914;--panel:#141426;--line:#292943;--violet:#a78bfa;--cyan:#67e8f9;--muted:#9a9ab5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -10%,#29204a 0,#0d0d1b 45%,var(--bg) 100%);color:#f4f1ff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+main{max-width:850px;margin:auto;padding:20px 15px 28px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.brand{font-weight:850;letter-spacing:.13em;font-size:22px}.brand span{color:var(--violet)}.tag{font-size:10px;color:var(--cyan);letter-spacing:.16em;border:1px solid #34505a;border-radius:99px;padding:6px 9px}
+.sub{color:var(--muted);font-size:12px;margin-top:5px}.panel{background:linear-gradient(145deg,#19192d,#11111f);border:1px solid var(--line);border-radius:18px;padding:15px;margin:12px 0;box-shadow:0 12px 32px #0005}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.section-title{font-size:10px;letter-spacing:.18em;color:var(--cyan);font-weight:700;margin-bottom:13px}
+button,select{background:#22223a;border:1px solid #393957;color:#f5f2ff;border-radius:11px;padding:10px 12px;font:inherit}
+button:active{transform:scale(.98)}button.primary{background:linear-gradient(110deg,#7654c9,#397b9c);border:0;font-weight:700}
+select{max-width:100%}.status{color:var(--muted);font-size:11px;margin-left:auto}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.control{min-width:0}.control label{display:flex;justify-content:space-between;color:#d8d5ee;font-size:12px;margin-bottom:8px}.control output{color:var(--cyan);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--violet);height:26px;margin:0}
+.wave{display:flex;gap:7px}.wave button{flex:1;font-size:12px}.wave button.active{background:#554080;border-color:var(--violet);color:white}
+.keyboard-wrap{overflow-x:auto;padding:8px 2px 3px;touch-action:pan-x}.keyboard{position:relative;height:170px;min-width:650px;display:flex;user-select:none;-webkit-user-select:none;touch-action:pan-x}
+.white{position:relative;flex:1;background:linear-gradient(#fff,#d9d8e7);border:1px solid #aaa8ba;border-radius:0 0 7px 7px;height:160px;z-index:1}
+.white.down{background:linear-gradient(#c9b8f7,#9180c5)}
+.black{position:absolute;top:0;width:7%;height:99px;background:linear-gradient(90deg,#171522,#38344a,#111);border:1px solid #05050a;border-radius:0 0 5px 5px;z-index:3;transform:translateX(-50%);box-shadow:0 5px 7px #0008}
+.black.down{background:linear-gradient(#9b7be5,#51417a)}
+.note-label{position:absolute;bottom:8px;width:100%;text-align:center;color:#57566b;font-size:10px;pointer-events:none}
+.small{font-size:11px;color:var(--muted);line-height:1.5}.footer{text-align:center;color:#77758f;font-size:10px;padding:12px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.keyboard{height:210px}.white{height:200px}.black{height:120px}}
+</style>
+</head>
+<body>
+<main>
+ <div class="top"><div><div class="brand">DRIFT<span>//</span>KEYS</div><div class="sub">ATMOSPHERIC SYNTHESIZER · VERSION 0.1</div></div><div class="tag">BETA 01</div></div>
+ <section class="panel">
+  <div class="row"><div class="section-title" style="margin:0">SOUND ENGINE</div><div class="status" id="status">Touchez une touche pour activer le son</div></div>
+  <div class="row" style="margin-top:13px"><label class="small" for="preset">PRESET</label><select id="preset"><option value="horizon">Endless Horizon</option><option value="glass">Frozen Glass</option><option value="dust">Analog Dust</option><option value="machine">Hollow Machine</option><option value="collapse">Soft Collapse</option></select><button class="primary" id="start">ACTIVER LE SON</button></div>
+ </section>
+ <section class="panel">
+  <div class="section-title">OSCILLATOR</div>
+  <div class="wave" id="waves"><button data-wave="sine">SINE</button><button data-wave="triangle">TRIANGLE</button><button data-wave="sawtooth" class="active">SAW</button><button data-wave="square">SQUARE</button></div>
+  <div class="grid" style="margin-top:18px">
+   <div class="control"><label>FILTER <output id="filterVal">3200 Hz</output></label><input id="filter" type="range" min="150" max="10000" value="3200"></div>
+   <div class="control"><label>RESONANCE <output id="qVal">1.0</output></label><input id="q" type="range" min=".1" max="14" step=".1" value="1"></div>
+   <div class="control"><label>DRIFT <output id="driftVal">12%</output></label><input id="drift" type="range" min="0" max="100" value="12"></div>
+   <div class="control"><label>MASTER <output id="masterVal">70%</output></label><input id="master" type="range" min="0" max="100" value="70"></div>
+  </div>
+ </section>
+ <section class="panel">
+  <div class="section-title">ENVELOPE · ADSR</div>
+  <div class="grid">
+   <div class="control"><label>ATTACK <output id="attackVal">0.8 s</output></label><input id="attack" type="range" min=".01" max="5" step=".01" value=".8"></div>
+   <div class="control"><label>DECAY <output id="decayVal">1.8 s</output></label><input id="decay" type="range" min=".05" max="5" step=".05" value="1.8"></div>
+   <div class="control"><label>SUSTAIN <output id="sustainVal">65%</output></label><input id="sustain" type="range" min="0" max="100" value="65"></div>
+   <div class="control"><label>RELEASE <output id="releaseVal">2.5 s</output></label><input id="release" type="range" min=".05" max="8" step=".05" value="2.5"></div>
+  </div>
+ </section>
+ <section class="panel">
+  <div class="section-title">SPACE & ECHO</div>
+  <div class="grid">
+   <div class="control"><label>DELAY MIX <output id="delayVal">22%</output></label><input id="delay" type="range" min="0" max="70" value="22"></div>
+   <div class="control"><label>FEEDBACK <output id="feedbackVal">35%</output></label><input id="feedback" type="range" min="0" max="85" value="35"></div>
+   <div class="control"><label>REVERB <output id="reverbVal">25%</output></label><input id="reverb" type="range" min="0" max="80" value="25"></div>
+   <div class="control"><label>WIDTH <output id="widthVal">80%</output></label><input id="width" type="range" min="0" max="100" value="80"></div>
+  </div>
+ </section>
+ <section class="panel">
+  <div class="row"><div class="section-title" style="margin:0">TOUCH KEYBOARD</div><div class="status">2 OCTAVES</div></div>
+  <div class="keyboard-wrap"><div class="keyboard" id="keyboard"></div></div>
+  <div class="small">Maintenez une touche pour jouer. Relâchez pour déclencher le Release. Faites défiler horizontalement pour accéder aux notes.</div>
+ </section>
+ <div class="footer">DRIFT//KEYS · Prototype expérimental · Audio généré en temps réel sur l'appareil</div>
+</main>
+<script>
+(()=> {
+let ctx=null, master=null, filter=null, delay=null, feedback=null, delayWet=null, dry=null, convolver=null, reverbWet=null, wave='sawtooth', active=new Map();
+const $=id=>document.getElementById(id);
+function makeImpulse(c){const len=c.sampleRate*3.2,b=c.createBuffer(2,len,c.sampleRate);for(let ch=0;ch<2;ch++){let d=b.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.4)}return b}
+async function init(){if(ctx)return;ctx=new (window.AudioContext||window.webkitAudioContext)();await ctx.resume();master=ctx.createGain();filter=ctx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=+$('filter').value;filter.Q.value=+$('q').value;delay=ctx.createDelay(2);delay.delayTime.value=.42;feedback=ctx.createGain();feedback.gain.value=+$('feedback').value/100;delayWet=ctx.createGain();dry=ctx.createGain();convolver=ctx.createConvolver();convolver.buffer=makeImpulse(ctx);reverbWet=ctx.createGain();filter.connect(dry);filter.connect(delay);delay.connect(feedback);feedback.connect(delay);delay.connect(delayWet);filter.connect(convolver);convolver.connect(reverbWet);dry.connect(master);delayWet.connect(master);reverbWet.connect(master);master.connect(ctx.destination);apply();$('status').textContent='Moteur audio actif';$('start').textContent='SON ACTIVÉ'}
+function apply(){if(!ctx)return;let t=ctx.currentTime;filter.frequency.setTargetAtTime(+$('filter').value,t,.03);filter.Q.setTargetAtTime(+$('q').value,t,.03);master.gain.setTargetAtTime(+$('master').value/100,t,.03);feedback.gain.setTargetAtTime(+$('feedback').value/100,t,.03);delayWet.gain.setTargetAtTime(+$('delay').value/100,t,.03);dry.gain.setTargetAtTime(1-(+$('delay').value/100)*.45,t,.03);reverbWet.gain.setTargetAtTime(+$('reverb').value/100,t,.03)}
+function noteOn(n,el){if(!ctx){init().then(()=>noteOn(n,el));return}if(active.has(n))return;let now=ctx.currentTime,osc=ctx.createOscillator(),gain=ctx.createGain(),detune=(Math.random()-.5)*(+$('drift').value)*.22;osc.type=wave;osc.frequency.value=440*Math.pow(2,(n-69)/12);osc.detune.value=detune;gain.gain.setValueAtTime(.0001,now);let a=+$('attack').value,d=+$('decay').value,s=+$('sustain').value/100;gain.gain.exponentialRampToValueAtTime(.7,now+a);gain.gain.exponentialRampToValueAtTime(Math.max(.0002,.7*s),now+a+d);osc.connect(gain);gain.connect(filter);osc.start();active.set(n,{osc,gain,el});if(el)el.classList.add('down')}
+function noteOff(n){let v=active.get(n);if(!v)return;let now=ctx.currentTime,r=+$('release').value;v.gain.gain.cancelScheduledValues(now);v.gain.gain.setTargetAtTime(.0001,now,r/4);v.osc.stop(now+r+.08);if(v.el)v.el.classList.remove('down');active.delete(n)}
+const whiteNotes=[0,2,4,5,7,9,11],blackAfter=[0,1,3,4,5];
+function buildKeys(){let k=$('keyboard'),base=48;for(let i=0;i<15;i++){let sem=i%7,oct=Math.floor(i/7),n=base+oct*12+whiteNotes[sem],w=document.createElement('div');w.className='white';w.dataset.note=n;let lab=document.createElement('span');lab.className='note-label';lab.textContent=['C','D','E','F','G','A','B'][sem]+(3+oct);w.append(lab);k.append(w);bind(w,n)}
+// 10 black keys positioned over white-key boundaries
+for(let i=0;i<14;i++){let sem=i%7;if([0,1,3,4,5].includes(sem)){let n=base+Math.floor(i/7)*12+[1,3,6,8,10][[0,1,3,4,5].indexOf(sem)];let b=document.createElement('div');b.className='black';b.style.left=((i+1)/15*100)+'%';b.dataset.note=n;k.append(b);bind(b,n)}}}
+function bind(el,n){el.addEventListener('pointerdown',e=>{e.preventDefault();el.setPointerCapture?.(e.pointerId);noteOn(n,el)});el.addEventListener('pointerup',e=>{e.preventDefault();noteOff(n)});el.addEventListener('pointercancel',()=>noteOff(n));el.addEventListener('lostpointercapture',()=>noteOff(n))}
+$('start').addEventListener('click',init);$('waves').addEventListener('click',e=>{let b=e.target.closest('button[data-wave]');if(!b)return;wave=b.dataset.wave;document.querySelectorAll('#waves button').forEach(x=>x.classList.toggle('active',x===b))});
+const defs={filter:[' Hz',0],q:['',1],drift:['%',0],master:['%',0],attack:[' s',1],decay:[' s',1],sustain:['%',0],release:[' s',1],delay:['%',0],feedback:['%',0],reverb:['%',0],width:['%',0]};
+Object.keys(defs).forEach(id=>$(id).addEventListener('input',()=>{let v=+$(id).value;$(id+'Val').textContent=(defs[id][1]?v.toFixed(1):Math.round(v))+defs[id][0];apply()}));
+$('preset').addEventListener('change',e=>{let p=e.target.value,sets={horizon:{wave:'sawtooth',filter:2200,attack:.8,decay:1.8,sustain:65,release:2.5,delay:22,feedback:35,reverb:25,drift:12},glass:{wave:'sine',filter:6800,attack:1.6,decay:2.8,sustain:80,release:4.5,delay:32,feedback:42,reverb:55,drift:5},dust:{wave:'triangle',filter:1500,attack:.05,decay:1.2,sustain:48,release:1.4,delay:18,feedback:28,reverb:18,drift:48},machine:{wave:'square',filter:900,attack:.02,decay:.8,sustain:35,release:2.2,delay:38,feedback:58,reverb:32,drift:8},collapse:{wave:'sawtooth',filter:3600,attack:2.5,decay:3,sustain:90,release:6,delay:48,feedback:65,reverb:62,drift:25}}[p];Object.entries(sets).forEach(([id,v])=>{if(id==='wave'){wave=v;document.querySelectorAll('#waves button').forEach(b=>b.classList.toggle('active',b.dataset.wave===v))}else{$(id).value=v;$(id+'Val').textContent=(defs[id][1]?Number(v).toFixed(1):v)+defs[id][0]}});apply()});
+buildKeys();
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&ctx)active.forEach((_,n)=>noteOff(n))});
+})();
+</script>
+</body>
+</html>
